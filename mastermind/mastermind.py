@@ -10,14 +10,16 @@ class Mastermind:
 
 
     def __init__(self, numberOfPegs, numberOfChoices):
-        pattern = []
+        pattern = ""
         for x in range(0, numberOfPegs):
-            pattern.append(randrange(numberOfChoices))
+            pattern += str(randrange(numberOfChoices))
         
-        game = Game(pattern=pattern)
-        game.save()
+        self.game = Game(pattern=pattern)
+        self.game.save()
 
-        self.game = game
+
+    def __init__(self, gameId):
+        self.game = Game.objects.filter(pk=gameId).first()
 
 
     def guess(self, guess):
