@@ -59,6 +59,61 @@ def game(request, game_id):
     return HttpResponse(json.dumps(result))
 
 
+def new_guess(request, game_id):
+    result = {
+        'res': 'OK',
+        'error': '',
+        'data': '',
+    }
+
+    if request.method != 'POST':
+        result['res'] = 'ERROR'
+        result['error'] = 'This is a POST endpoint, you cannot invoke a GET'
+
+        return HttpResponse(json.dumps(result))
+
+    mastermind = Mastermind()
+    mastermind.getGame(game_id)
+
+    if mastermind.game == None:
+        result['res'] = 'ERROR'
+        result['error'] = 'There is no game with id ' + str(game_id)
+
+        return HttpResponse(json.dumps(result))
+
+    if mastermind.isCompleted():
+        result['res'] = 'ERROR'
+        result['error'] = 'This game is completed. ' \
+                    'It was solved in ' + str(mastermind.game.attempts) + ' attempts. ' \
+                    'Its pattern was "' + patternToGuess(mastermind.game.pattern) + '"'
+
+        return HttpResponse(json.dumps(result))
+
+    try:
+        guess = request.POST.get('guess')
+        guess = guessToPattern(guess)
+    except ValueError as err:
+        result['res'] = 'ERROR'
+        result['error'] = 'Color ' + str(err) + ' is not allowed, instead use one of the following: ' + ', '.join(colors[:mastermind.game.num_choices])
+
+        return HttpResponse(json.dumps(result))
+
+    if len(guess) != len(mastermind.game.pattern):
+        result['res'] = 'ERROR'
+        result['error'] = 'The number of colors has to be ' + str(len(mastermind.game.pattern))
+
+        return HttpResponse(json.dumps(result))
+
+    correctValueAndPosition, correctValueNotPosition = mastermind.guess(guess)
+
+    result = {
+        'black': correctValueAndPosition,
+        'white': correctValueNotPosition,
+    }
+
+    return HttpResponse(json.dumps(result))
+
+
 def gameToJson(game, showPattern):
     jsonGame = {
         'id': game.id,
@@ -91,3 +146,14 @@ def patternToGuess(pattern):
     for x in pattern:
         guess.append(colors[int(x)].upper())
     return ','.join(guess)
+
+
+def guessToPattern(guess):
+    pattern = []
+    uppercaseColors = [color.upper() for color in colors]
+    for x in guess.split(','):
+        if x.upper() in uppercaseColors:
+            pattern.append(uppercaseColors.index(x.upper()))
+        else:
+            raise ValueError(x)
+    return ''.join(str(x) for x in pattern)
