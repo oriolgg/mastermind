@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from .mastermind import Mastermind
 
 import json
+
+
+colors = [ "White", "Yellow", "Red", "Gray", "Purple", "Maroon", "Lime", "Green", "Blue", "Black", ]
 
 
 def new_game(request):
@@ -40,14 +42,19 @@ def new_game(request):
 
 
 def game(request, game_id):
-    mastermind = Mastermind(game_id)
-    serializedGame = serializers.serialize("json", [ mastermind.game, ])
-
     result = {
         'res': 'OK',
-        'error': {},
-        'data': serializedGame,
+        'error': '',
+        'data': '',
     }
+
+    mastermind = Mastermind()
+    mastermind.getGame(game_id)
+    if mastermind.game == None:
+        result['res'] = 'ERROR'
+        result['error'] = 'There is no game with id ' + str(game_id)
+    else:
+        result['data'] = gameToJson(mastermind.game, mastermind.isCompleted())
 
     return HttpResponse(json.dumps(result))
 
@@ -77,3 +84,10 @@ def gameToJson(game, showPattern):
         jsonGame['pattern'] = patternToGuess(game.pattern)
 
     return jsonGame
+
+
+def patternToGuess(pattern):
+    guess = []
+    for x in pattern:
+        guess.append(colors[int(x)].upper())
+    return ','.join(guess)

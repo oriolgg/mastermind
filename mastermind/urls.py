@@ -3,8 +3,9 @@
 from . import views
 
 from django.urls import path
+from django.urls import re_path
 
 urlpatterns = [
     path('game', views.new_game),
-    path('game/<int:game_id>', views.game, name='get_game'),
+    re_path(r'^game/(?P<game_id>[0-9]+)$', views.game),
 ]
