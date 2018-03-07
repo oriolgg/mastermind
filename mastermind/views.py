@@ -147,6 +147,7 @@ def gameToJson(game, showPattern):
     for attempt in game.attempt_set.all():
         attempt = {
             'id': attempt.id,
+            'attempted_at': attempt.attempted_at.strftime('%Y-%m-%d %H:%M:%S'),
             'guess': patternToGuess(attempt.guess),
             'black': attempt.correct_value_and_position,
             'white': attempt.correct_value_not_position,
