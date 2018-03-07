@@ -12,23 +12,23 @@ git
 
 1. Clone this repository:
 
-    $ git clone https://github.com/oriolgg/mastermind
+        $ git clone https://github.com/oriolgg/mastermind
 
 2. Create and source a virtualenv for this project:
 
-    $ virtualenv mastermind_env ; source mastermind_env/bin/activate
+        $ virtualenv mastermind_env ; source mastermind_env/bin/activate
 
 3. Install dependenciesfor this project:
 
-    $ cd mastermind ; pip install -r requirements.txt
+        $ cd mastermind ; pip install -r requirements.txt
 
 4. Generate the Database to save the games:
 
-    $ python manage.py migrate
+        $ python manage.py migrate
 
 5. Run the server:
 
-    $ python manage.py runserver
+        $ python manage.py runserver
 
 # How it works #
 
