@@ -4,11 +4,9 @@ This is a REST API to play Mastermind game.
 
 # Requirements #
 
-Python 3.6
-
-virtualenv
-
-git
+- Python 3.6
+- virtualenv
+- git
 
 # Install instructions #
 
