@@ -54,6 +54,8 @@ This is a REST API to play Mastermind game.
 
     You can change the number of pegs or possible choices to make the game easier or harder by passing the variables "numberOfPegs" and "numberOfChoices".
 
+    It will not show the pattern created unless the user guesses it.
+
 - Get current state of some game:
     Execute a GET request to the endpoint http://localhost:8000/mastermind/game/{id}
     This will return a json representation of this game, including all the attempts that the user has made:

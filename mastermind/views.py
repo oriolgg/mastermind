@@ -12,6 +12,10 @@ colors = [ "White", "Yellow", "Red", "Gray", "Purple", "Maroon", "Lime", "Green"
 
 
 def new_game(request):
+    """
+    POST:
+    Generates a new game and returns its json representation
+    """
     result = {
         'res': 'OK',
         'error': '',
@@ -42,6 +46,10 @@ def new_game(request):
 
 
 def game(request, game_id):
+    """
+    GET/POST:
+    Returns the json representation of the specified game
+    """
     result = {
         'res': 'OK',
         'error': '',
@@ -60,6 +68,11 @@ def game(request, game_id):
 
 
 def new_guess(request, game_id):
+    """
+    POST:
+    Creates an attempt to guess the specified game.
+    Returns a json with two keys: black and white
+    """
     result = {
         'res': 'OK',
         'error': '',
@@ -81,6 +94,7 @@ def new_guess(request, game_id):
 
         return HttpResponse(json.dumps(result))
 
+    # Returns an error if the game is completed, so the user cannot make more attempts on it
     if mastermind.isCompleted():
         result['res'] = 'ERROR'
         result['error'] = 'This game is completed. ' \
@@ -89,6 +103,7 @@ def new_guess(request, game_id):
 
         return HttpResponse(json.dumps(result))
 
+    # Checks if the guess is well-formed
     try:
         guess = request.POST.get('guess')
         guess = guessToPattern(guess)
@@ -98,6 +113,7 @@ def new_guess(request, game_id):
 
         return HttpResponse(json.dumps(result))
 
+    # Checks if the guess has the same length as the game pattern
     if len(guess) != len(mastermind.game.pattern):
         result['res'] = 'ERROR'
         result['error'] = 'The number of colors has to be ' + str(len(mastermind.game.pattern))
@@ -115,6 +131,9 @@ def new_guess(request, game_id):
 
 
 def gameToJson(game, showPattern):
+    """
+    Constructs a json representation of a game, showing or not its pattern
+    """
     jsonGame = {
         'id': game.id,
         'started_at': game.started_at.strftime('%Y-%m-%d %H:%M:%S'),
@@ -142,6 +161,13 @@ def gameToJson(game, showPattern):
 
 
 def patternToGuess(pattern):
+    """
+    Since the mastermind game does not know what kind of elements will be able to be choosen
+    by the user (maybe colors, or emojis or anything else), we need two methods to transform
+    from the user elements to the pattern that matermind understands.
+
+    This method transforms the mastermind pattern to colors
+    """
     guess = []
     for x in pattern:
         guess.append(colors[int(x)].upper())
@@ -149,6 +175,13 @@ def patternToGuess(pattern):
 
 
 def guessToPattern(guess):
+    """
+    Since the mastermind game does not know what kind of elements will be able to be choosen
+    by the user (maybe colors, or emojis or anything else), we need two methods to transform
+    from the user elements to the pattern that matermind understands.
+
+    This method transforms the colors to the mastermind pattern
+    """
     pattern = []
     uppercaseColors = [color.upper() for color in colors]
     for x in guess.split(','):
