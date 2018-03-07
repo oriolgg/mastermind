@@ -7,7 +7,6 @@ from django.utils.translation import ugettext as _
 GAME_STATES = (
     ('NEW', _(u'New')),
     ('STARTED', _(u'Started')),
-    ('ERROR', _(u'Error')),
     ('COMPLETED', _(u'Completed')),
 )
 
@@ -16,6 +15,8 @@ class Game(models.Model):
     started_at = models.DateTimeField(auto_now_add=True)
     pattern = models.CharField(max_length=32)
     state = models.CharField(max_length=32, choices=GAME_STATES, default='NEW')
+    num_pegs = models.IntegerField(default=4)
+    num_choices = models.IntegerField(default=5)
     attempts = models.IntegerField(default=0)
 
 
