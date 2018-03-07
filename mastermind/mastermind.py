@@ -44,7 +44,7 @@ class Mastermind:
             self.game.state = 'COMPLETED'
         else:
             self.game.state = 'STARTED'
-        self.game.attempts += 1
+        self.game.num_attempts += 1
         self.game.save()
         attempt = Attempt(guess=guess, correct_value_and_position=correctValueAndPosition, correct_value_not_position=correctValueNotPosition, game=self.game)
         attempt.save()
