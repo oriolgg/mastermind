@@ -45,8 +45,8 @@ This is a REST API to play Mastermind game.
                 "id": 1,
                 "started_at": "2018-03-07 11:23:52",
                 "state": "NEW",
-                "num_pegs": 4,
-                "num_choices": 5,
+                "num_pegs": 6,
+                "num_choices": 6,
                 "num_attempts": 0,
                 "attempts": []
             }
