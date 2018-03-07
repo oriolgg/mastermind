@@ -98,7 +98,7 @@ def new_guess(request, game_id):
     if mastermind.isCompleted():
         result['res'] = 'ERROR'
         result['error'] = 'This game is completed. ' \
-                    'It was solved in ' + str(mastermind.game.attempts) + ' attempts. ' \
+                    'It was solved in ' + str(mastermind.game.num_attempts) + ' attempts. ' \
                     'Its pattern was "' + patternToGuess(mastermind.game.pattern) + '"'
 
         return HttpResponse(json.dumps(result))
