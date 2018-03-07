@@ -17,7 +17,7 @@ class Game(models.Model):
     state = models.CharField(max_length=32, choices=GAME_STATES, default='NEW')
     num_pegs = models.IntegerField(default=4)
     num_choices = models.IntegerField(default=5)
-    attempts = models.IntegerField(default=0)
+    num_attempts = models.IntegerField(default=0)
 
 
 class Attempt(models.Model):
